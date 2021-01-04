@@ -1,8 +1,9 @@
 //! Author: Masahiro Itabashi <itabasi.lm@gmail.com>
-//! Last modified: Thu, 31 Dec 2020 23:35:38 +0900
-extern crate rip;
+//! Last modified: Mon, 04 Jan 2021 23:16:07 +0900
+pub mod parse_args;
+pub mod bin_search_tree_node;
 
-use rip::parse_args::Args;
+use parse_args::Args;
 
 fn main(){
     let args: Args = Args::parse_args();
