@@ -1,5 +1,5 @@
 //! Author: Masahiro Itabashi <itabasi.lm@gmail.com>
-//! Last modified: Thu, 07 Jan 2021 21:28:49 +0900
+//! Last modified: Fri, 08 Jan 2021 21:30:22 +0900
 extern crate typed_arena;
 
 use std::cell::RefCell;
@@ -85,4 +85,23 @@ pub fn print_node<'a, T: Ord + Display>(root_node: Node<'a, T>, order: usize){
             }
         },
     }
+}
+
+pub fn subst_string<'a>(root_node: Node<'a, String>,
+                                          target_str: &String,
+                                          replace_str: &String) -> usize {
+    let mut replaced_node: usize = 0;
+    let replaced_str = 
+        (*root_node.value.borrow_mut()).replace(target_str, replace_str);
+    (*root_node.value.borrow_mut()) = replaced_str;
+    replaced_node += 1;
+    if !root_node.left_child.borrow().is_empty() {
+        replaced_node += 
+            subst_string(root_node.left_child.borrow()[0], target_str, replace_str);
+    }
+    if !root_node.right_child.borrow().is_empty() {
+        replaced_node += 
+            subst_string(root_node.right_child.borrow()[0], target_str, replace_str);
+    }
+    replaced_node
 }
