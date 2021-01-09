@@ -1,5 +1,5 @@
 //! Author: Masahiro Itabashi <itabasi.lm@gmail.com>
-//! Last modified: Fri, 08 Jan 2021 21:30:22 +0900
+//! Last modified: Sat, 09 Jan 2021 22:31:20 +0900
 extern crate typed_arena;
 
 use std::cell::RefCell;
@@ -104,4 +104,43 @@ pub fn subst_string<'a>(root_node: Node<'a, String>,
             subst_string(root_node.right_child.borrow()[0], target_str, replace_str);
     }
     replaced_node
+}
+
+pub fn create_array<'a, T: Ord + Clone>(root_node: Node<'a, T>, order: usize) -> Vec<T>{
+    let mut array = Vec::new();
+    match order {
+        0 => {
+            let value = (*root_node.value.borrow()).clone();
+            array.push(value);
+            if !root_node.left_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.left_child.borrow()[0], order));
+            }
+            if !root_node.right_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.right_child.borrow()[0], order));
+            }
+            array
+        },
+        2 => {
+            if !root_node.left_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.left_child.borrow()[0], order));
+            }
+            if !root_node.right_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.right_child.borrow()[0], order));
+            }
+            let value = (*root_node.value.borrow()).clone();
+            array.push(value);
+            array
+        },
+        _ => {
+            if !root_node.left_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.left_child.borrow()[0], order));
+            }
+            let value = (*root_node.value.borrow()).clone();
+            array.push(value);
+            if !root_node.right_child.borrow().is_empty() {
+                array.append(&mut create_array(root_node.right_child.borrow()[0], order));
+            }
+            array
+        },
+    }
 }
