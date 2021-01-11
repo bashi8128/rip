@@ -1,5 +1,5 @@
 //! Author: Masahiro Itabashi <itabasi.lm@gmail.com>
-//! Last modified: Thu, 31 Dec 2020 23:30:31 +0900
+//! Last modified: Mon, 11 Jan 2021 21:35:22 +0900
 use std::env;
 
 use docopt::Docopt;
@@ -29,7 +29,7 @@ impl Args {
           -s SUBST          substitute specified node and output BinTree
           -u                output BinTree with a deduplication
           -r REMOVE         remove specified node
-          -h,--help         output this help
+          -h --help         output this help
         ";
         let args: Args = Docopt::new(USAGE)
             .and_then(|d| d.argv(env::args().into_iter()).deserialize())
